@@ -33,13 +33,19 @@ class Game {
     private width: number;
     private interval: any;
     private elementPos: Position;
+    private FIGURE_SIZE: number = 50;
+
+
+    private gravity = 0.3;
+    private gravitySpeed = 0;
+    private canJump = false;
 
     constructor(mCanvas: HTMLCanvasElement) {
         this.context = <CanvasRenderingContext2D>mCanvas.getContext("2d");
         this.height = mCanvas.height;
         this.width = mCanvas.width;
 
-        this.elementPos = new Position(100, 20);
+        this.elementPos = new Position(100, 400);
     }
 
     start() {
@@ -57,15 +63,29 @@ class Game {
         this.draw();
     }
 
+
     /**
-     * Function that moves the element on the screeen
+     * Function that implements gravity to the game
      */
     moveElement() {
-        this.elementPos.setY(this.elementPos.getY() + 10);
-
-        if (this.elementPos.getY() > this.height - 50) {
-            this.elementPos.setY(this.height - 50);
+        if (this.elementPos.getY() >= this.height - this.FIGURE_SIZE) {
+            this.elementPos.setY(this.height - this.FIGURE_SIZE);
+            this.gravitySpeed = 0;
+            this.canJump = true;
+        } else {
+            this.canJump = false;
+            this.gravity = .3;
         }
+
+        this.gravitySpeed += this.gravity;
+        this.elementPos.setY(this.elementPos.getY() + this.gravitySpeed);
+    }
+
+    /**
+     * Function that makes the figure to jump
+     */
+    jump() {
+        this.gravity = -7;
     }
 
     /**
@@ -79,9 +99,8 @@ class Game {
      * Function that draws the elements
      */
     draw() {
-        console.log("draw");
         this.context.fillStyle = "red";
-        this.context.fillRect(this.elementPos.getX(), this.elementPos.getY(), 50, 50);
+        this.context.fillRect(this.elementPos.getX(), this.elementPos.getY(), this.FIGURE_SIZE, this.FIGURE_SIZE);
     }
 }
 
@@ -91,13 +110,15 @@ function keyPressed(event: KeyboardEvent) {
 
     switch (KEY_CODE) {
         case SPACE_BAR:
-            game.moveElement();
+            game.jump();
             break;
     }
 }
 
+
 window.onload = function () {
     document.addEventListener("keydown", keyPressed);
+
     const CANVAS = initGameWindow();
     game = new Game(CANVAS);
     game.start();

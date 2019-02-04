@@ -21,10 +21,14 @@ var Position = /** @class */ (function () {
 }());
 var Game = /** @class */ (function () {
     function Game(mCanvas) {
+        this.FIGURE_SIZE = 50;
+        this.gravity = 0.3;
+        this.gravitySpeed = 0;
+        this.canJump = false;
         this.context = mCanvas.getContext("2d");
         this.height = mCanvas.height;
         this.width = mCanvas.width;
-        this.elementPos = new Position(100, 20);
+        this.elementPos = new Position(100, 400);
     }
     Game.prototype.start = function () {
         var _this = this;
@@ -41,13 +45,26 @@ var Game = /** @class */ (function () {
         this.draw();
     };
     /**
-     * Function that moves the element on the screeen
+     * Function that implements gravity to the game
      */
     Game.prototype.moveElement = function () {
-        this.elementPos.setY(this.elementPos.getY() + 10);
-        if (this.elementPos.getY() > this.height - 50) {
-            this.elementPos.setY(this.height - 50);
+        if (this.elementPos.getY() >= this.height - this.FIGURE_SIZE) {
+            this.elementPos.setY(this.height - this.FIGURE_SIZE);
+            this.gravitySpeed = 0;
+            this.canJump = true;
         }
+        else {
+            this.canJump = false;
+            this.gravity = .3;
+        }
+        this.gravitySpeed += this.gravity;
+        this.elementPos.setY(this.elementPos.getY() + this.gravitySpeed);
+    };
+    /**
+     * Function that makes the figure to jump
+     */
+    Game.prototype.jump = function () {
+        this.gravity = -7;
     };
     /**
      * Function to clear the canvas
@@ -59,9 +76,8 @@ var Game = /** @class */ (function () {
      * Function that draws the elements
      */
     Game.prototype.draw = function () {
-        console.log("draw");
         this.context.fillStyle = "red";
-        this.context.fillRect(this.elementPos.getX(), this.elementPos.getY(), 50, 50);
+        this.context.fillRect(this.elementPos.getX(), this.elementPos.getY(), this.FIGURE_SIZE, this.FIGURE_SIZE);
     };
     return Game;
 }());
@@ -70,7 +86,7 @@ function keyPressed(event) {
     var SPACE_BAR = 32;
     switch (KEY_CODE) {
         case SPACE_BAR:
-            game.moveElement();
+            game.jump();
             break;
     }
 }
