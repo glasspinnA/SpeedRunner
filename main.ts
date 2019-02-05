@@ -76,8 +76,8 @@ class Game {
 
     private frameRate: number = 0;
 
-    private ob: GameElement;
     private player: GameElement;
+    private obstacleArray = Array<GameElement>();
 
     constructor(mCanvas: HTMLCanvasElement) {
         this.context = <CanvasRenderingContext2D>mCanvas.getContext("2d");
@@ -85,7 +85,7 @@ class Game {
         this.canvasWidth = mCanvas.width;
 
         this.player = new GameElement(this.FIGURE_SIZE, this.FIGURE_SIZE, new Position(100, 400), "yellow");
-        this.ob = new GameElement(50, 200, new Position(500, 300), "blue");
+        this.obstacleArray.push(new GameElement(50, 200, new Position(500, 300), "blue"));
     }
 
     start() {
@@ -100,19 +100,60 @@ class Game {
     update() {
         this.clearCanvas();
         this.moveElement();
-        this.checkCollision();
-        this.draw();
-        this.drawOb();
+        //this.checkCollision();
+        this.drawPlayer();
+        this.drawObstacle();
+        this.passedObstacle();
+    }
 
-        console.log(this.frameRate++);
+    /**
+     * Function that checks if the player have jumped over the obstacle
+     * if so the process to create a new obstalce begins
+     */
+    passedObstacle() {
+        this.frameRate++;
+
         if (this.frameRate > 55) {
-            clearInterval(this.interval);
+            this.updateObstacle();
         }
     }
 
-    drawOb() {
-        this.context.fillStyle = this.ob.getColor();
-        this.context.fillRect(this.ob.getPosition().getX(), this.ob.getPosition().getY(), this.ob.getWidth(), this.ob.getHeigth());
+    /**
+     * Function that updates the obstalce with a new obstacle with new attributes
+     * and deletes the old obstacle that the player have jumped over
+     */
+    updateObstacle() {
+        this.frameRate = 0;
+
+        this.obstacleArray.pop();
+
+        this.obstacleArray.push(this.createObstalce());
+    }
+
+    /**
+     * Function to create a new obstalce
+     */
+    createObstalce() {
+        // 11 = differeansen mellan x1 och x2 plus en etta
+        const obstalceWidth = Math.floor(Math.random() * 11) + 40;
+        const obstalceHeight = Math.floor(Math.random() * 11) + 40;
+
+        const startPositionX = Math.floor(Math.random() * 20) + 500;
+        const startPositionY = this.canvasHeight - obstalceHeight;
+
+        return new GameElement(obstalceWidth, obstalceHeight, new Position(startPositionX, startPositionY), "brown");
+    }
+
+    /**
+     * Function that draws the obstacle
+     */
+    drawObstacle() {
+        this.context.fillStyle = this.obstacleArray[0].getColor();
+        this.context.fillRect(
+            this.obstacleArray[0].getPosition().getX(),
+            this.obstacleArray[0].getPosition().getY(),
+            this.obstacleArray[0].getWidth(),
+            this.obstacleArray[0].getHeigth());
     }
 
 
@@ -131,15 +172,16 @@ class Game {
         this.player.getPosition().setY(this.player.getPosition().getY() + this.gravitySpeed);
 
 
-        this.ob.getPosition().setX(this.ob.getPosition().getX() - 10);
+        this.obstacleArray[0].getPosition().setX(this.obstacleArray[0].getPosition().getX() - 10);
     }
 
     /**
      * Function to check if the player touches any obstacle
      */
     checkCollision() {
-        if (this.ob.getPosition().getX() - this.player.getPosition().getX() <= this.FIGURE_SIZE &&
-            this.player.getPosition().getY() - this.ob.getPosition().getY() < 151) {
+        if (this.obstacleArray[0].getPosition().getX() - this.player.getPosition().getX() <= this.FIGURE_SIZE
+            &&
+            this.player.getPosition().getY() - this.obstacleArray[0].getPosition().getY() < 151) {
             clearInterval(this.interval);
         }
     }
@@ -159,11 +201,15 @@ class Game {
     }
 
     /**
-     * Function that draws the elements
+     * Function that draws the player element
      */
-    draw() {
+    drawPlayer() {
         this.context.fillStyle = this.player.getColor();
-        this.context.fillRect(this.player.getPosition().getX(), this.player.getPosition().getY(), this.FIGURE_SIZE, this.FIGURE_SIZE);
+        this.context.fillRect(
+            this.player.getPosition().getX(),
+            this.player.getPosition().getY(),
+            this.FIGURE_SIZE,
+            this.FIGURE_SIZE);
     }
 }
 

@@ -49,11 +49,12 @@ var Game = /** @class */ (function () {
         this.gravity = 0.3;
         this.gravitySpeed = 0;
         this.frameRate = 0;
+        this.obstacleArray = Array();
         this.context = mCanvas.getContext("2d");
         this.canvasHeight = mCanvas.height;
         this.canvasWidth = mCanvas.width;
         this.player = new GameElement(this.FIGURE_SIZE, this.FIGURE_SIZE, new Position(100, 400), "yellow");
-        this.ob = new GameElement(50, 200, new Position(500, 300), "blue");
+        this.obstacleArray.push(new GameElement(50, 200, new Position(500, 300), "blue"));
     }
     Game.prototype.start = function () {
         var _this = this;
@@ -67,17 +68,47 @@ var Game = /** @class */ (function () {
     Game.prototype.update = function () {
         this.clearCanvas();
         this.moveElement();
-        this.checkCollision();
-        this.draw();
-        this.drawOb();
-        console.log(this.frameRate++);
+        //this.checkCollision();
+        this.drawPlayer();
+        this.drawObstacle();
+        this.passedObstacle();
+    };
+    /**
+     * Function that checks if the player have jumped over the obstacle
+     * if so the process to create a new obstalce begins
+     */
+    Game.prototype.passedObstacle = function () {
+        this.frameRate++;
         if (this.frameRate > 55) {
-            clearInterval(this.interval);
+            this.updateObstacle();
         }
     };
-    Game.prototype.drawOb = function () {
-        this.context.fillStyle = this.ob.getColor();
-        this.context.fillRect(this.ob.getPosition().getX(), this.ob.getPosition().getY(), this.ob.getWidth(), this.ob.getHeigth());
+    /**
+     * Function that updates the obstalce with a new obstacle with new attributes
+     * and deletes the old obstacle that the player have jumped over
+     */
+    Game.prototype.updateObstacle = function () {
+        this.frameRate = 0;
+        this.obstacleArray.pop();
+        this.obstacleArray.push(this.createObstalce());
+    };
+    /**
+     * Function to create a new obstalce
+     */
+    Game.prototype.createObstalce = function () {
+        // 11 = differeansen mellan x1 och x2 plus en etta
+        var obstalceWidth = Math.floor(Math.random() * 11) + 40;
+        var obstalceHeight = Math.floor(Math.random() * 11) + 40;
+        var startPositionX = Math.floor(Math.random() * 20) + 500;
+        var startPositionY = this.canvasHeight - obstalceHeight;
+        return new GameElement(obstalceWidth, obstalceHeight, new Position(startPositionX, startPositionY), "brown");
+    };
+    /**
+     * Function that draws the obstacle
+     */
+    Game.prototype.drawObstacle = function () {
+        this.context.fillStyle = this.obstacleArray[0].getColor();
+        this.context.fillRect(this.obstacleArray[0].getPosition().getX(), this.obstacleArray[0].getPosition().getY(), this.obstacleArray[0].getWidth(), this.obstacleArray[0].getHeigth());
     };
     /**
      * Function that implements gravity to the game
@@ -92,14 +123,15 @@ var Game = /** @class */ (function () {
         }
         this.gravitySpeed += this.gravity;
         this.player.getPosition().setY(this.player.getPosition().getY() + this.gravitySpeed);
-        this.ob.getPosition().setX(this.ob.getPosition().getX() - 10);
+        this.obstacleArray[0].getPosition().setX(this.obstacleArray[0].getPosition().getX() - 10);
     };
     /**
      * Function to check if the player touches any obstacle
      */
     Game.prototype.checkCollision = function () {
-        if (this.ob.getPosition().getX() - this.player.getPosition().getX() <= this.FIGURE_SIZE &&
-            this.player.getPosition().getY() - this.ob.getPosition().getY() < 151) {
+        if (this.obstacleArray[0].getPosition().getX() - this.player.getPosition().getX() <= this.FIGURE_SIZE
+            &&
+                this.player.getPosition().getY() - this.obstacleArray[0].getPosition().getY() < 151) {
             clearInterval(this.interval);
         }
     };
@@ -116,9 +148,9 @@ var Game = /** @class */ (function () {
         this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
     };
     /**
-     * Function that draws the elements
+     * Function that draws the player element
      */
-    Game.prototype.draw = function () {
+    Game.prototype.drawPlayer = function () {
         this.context.fillStyle = this.player.getColor();
         this.context.fillRect(this.player.getPosition().getX(), this.player.getPosition().getY(), this.FIGURE_SIZE, this.FIGURE_SIZE);
     };
