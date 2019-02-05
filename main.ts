@@ -1,5 +1,41 @@
 var game: any;
 
+class GameElement {
+
+    private position: Position;
+    private height: number;
+    private width: number;
+    private color: string;
+
+    constructor(width: number, height: number, position: Position, color: string) {
+        this.width = width;
+        this.height = height;
+        this.position = position;
+        this.color = color;
+    }
+
+    getPosition() {
+        return this.position;
+    }
+
+    getWidth() {
+        return this.width;
+    }
+
+    getHeigth() {
+        return this.height;
+    }
+
+    setPosition() {
+        return this.position;
+    }
+
+    getColor() {
+        return this.color;
+    }
+
+}
+
 class Position {
     private posX: number;
     private posY: number;
@@ -29,27 +65,31 @@ class Position {
 
 class Game {
     private context: CanvasRenderingContext2D;
-    private height: number;
-    private width: number;
+    private canvasHeight: number;
+    private canvasWidth: number;
     private interval: any;
-    private elementPos: Position;
     private FIGURE_SIZE: number = 50;
 
 
     private gravity = 0.3;
     private gravitySpeed = 0;
-    private canJump = false;
+
+    private frameRate: number = 0;
+
+    private ob: GameElement;
+    private player: GameElement;
 
     constructor(mCanvas: HTMLCanvasElement) {
         this.context = <CanvasRenderingContext2D>mCanvas.getContext("2d");
-        this.height = mCanvas.height;
-        this.width = mCanvas.width;
+        this.canvasHeight = mCanvas.height;
+        this.canvasWidth = mCanvas.width;
 
-        this.elementPos = new Position(100, 400);
+        this.player = new GameElement(this.FIGURE_SIZE, this.FIGURE_SIZE, new Position(100, 400), "yellow");
+        this.ob = new GameElement(50, 200, new Position(500, 300), "blue");
     }
 
     start() {
-        let interval = setInterval(() => {
+        this.interval = setInterval(() => {
             this.update();
         }, 60);
     }
@@ -60,7 +100,19 @@ class Game {
     update() {
         this.clearCanvas();
         this.moveElement();
+        this.checkCollision();
         this.draw();
+        this.drawOb();
+
+        console.log(this.frameRate++);
+        if (this.frameRate > 55) {
+            clearInterval(this.interval);
+        }
+    }
+
+    drawOb() {
+        this.context.fillStyle = this.ob.getColor();
+        this.context.fillRect(this.ob.getPosition().getX(), this.ob.getPosition().getY(), this.ob.getWidth(), this.ob.getHeigth());
     }
 
 
@@ -68,17 +120,28 @@ class Game {
      * Function that implements gravity to the game
      */
     moveElement() {
-        if (this.elementPos.getY() >= this.height - this.FIGURE_SIZE) {
-            this.elementPos.setY(this.height - this.FIGURE_SIZE);
+        if (this.player.getPosition().getY() >= this.canvasHeight - this.FIGURE_SIZE) {
+            this.player.getPosition().setY(this.canvasHeight - this.FIGURE_SIZE);
             this.gravitySpeed = 0;
-            this.canJump = true;
         } else {
-            this.canJump = false;
             this.gravity = .3;
         }
 
         this.gravitySpeed += this.gravity;
-        this.elementPos.setY(this.elementPos.getY() + this.gravitySpeed);
+        this.player.getPosition().setY(this.player.getPosition().getY() + this.gravitySpeed);
+
+
+        this.ob.getPosition().setX(this.ob.getPosition().getX() - 10);
+    }
+
+    /**
+     * Function to check if the player touches any obstacle
+     */
+    checkCollision() {
+        if (this.ob.getPosition().getX() - this.player.getPosition().getX() <= this.FIGURE_SIZE &&
+            this.player.getPosition().getY() - this.ob.getPosition().getY() < 151) {
+            clearInterval(this.interval);
+        }
     }
 
     /**
@@ -92,15 +155,15 @@ class Game {
      * Function to clear the canvas
      */
     clearCanvas() {
-        this.context.clearRect(0, 0, this.width, this.height);
+        this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
     }
 
     /**
      * Function that draws the elements
      */
     draw() {
-        this.context.fillStyle = "red";
-        this.context.fillRect(this.elementPos.getX(), this.elementPos.getY(), this.FIGURE_SIZE, this.FIGURE_SIZE);
+        this.context.fillStyle = this.player.getColor();
+        this.context.fillRect(this.player.getPosition().getX(), this.player.getPosition().getY(), this.FIGURE_SIZE, this.FIGURE_SIZE);
     }
 }
 

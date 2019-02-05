@@ -1,5 +1,29 @@
 "use strict";
 var game;
+var GameElement = /** @class */ (function () {
+    function GameElement(width, height, position, color) {
+        this.width = width;
+        this.height = height;
+        this.position = position;
+        this.color = color;
+    }
+    GameElement.prototype.getPosition = function () {
+        return this.position;
+    };
+    GameElement.prototype.getWidth = function () {
+        return this.width;
+    };
+    GameElement.prototype.getHeigth = function () {
+        return this.height;
+    };
+    GameElement.prototype.setPosition = function () {
+        return this.position;
+    };
+    GameElement.prototype.getColor = function () {
+        return this.color;
+    };
+    return GameElement;
+}());
 var Position = /** @class */ (function () {
     function Position(x, y) {
         this.posX = x;
@@ -24,15 +48,16 @@ var Game = /** @class */ (function () {
         this.FIGURE_SIZE = 50;
         this.gravity = 0.3;
         this.gravitySpeed = 0;
-        this.canJump = false;
+        this.frameRate = 0;
         this.context = mCanvas.getContext("2d");
-        this.height = mCanvas.height;
-        this.width = mCanvas.width;
-        this.elementPos = new Position(100, 400);
+        this.canvasHeight = mCanvas.height;
+        this.canvasWidth = mCanvas.width;
+        this.player = new GameElement(this.FIGURE_SIZE, this.FIGURE_SIZE, new Position(100, 400), "yellow");
+        this.ob = new GameElement(50, 200, new Position(500, 300), "blue");
     }
     Game.prototype.start = function () {
         var _this = this;
-        var interval = setInterval(function () {
+        this.interval = setInterval(function () {
             _this.update();
         }, 60);
     };
@@ -42,23 +67,41 @@ var Game = /** @class */ (function () {
     Game.prototype.update = function () {
         this.clearCanvas();
         this.moveElement();
+        this.checkCollision();
         this.draw();
+        this.drawOb();
+        console.log(this.frameRate++);
+        if (this.frameRate > 55) {
+            clearInterval(this.interval);
+        }
+    };
+    Game.prototype.drawOb = function () {
+        this.context.fillStyle = this.ob.getColor();
+        this.context.fillRect(this.ob.getPosition().getX(), this.ob.getPosition().getY(), this.ob.getWidth(), this.ob.getHeigth());
     };
     /**
      * Function that implements gravity to the game
      */
     Game.prototype.moveElement = function () {
-        if (this.elementPos.getY() >= this.height - this.FIGURE_SIZE) {
-            this.elementPos.setY(this.height - this.FIGURE_SIZE);
+        if (this.player.getPosition().getY() >= this.canvasHeight - this.FIGURE_SIZE) {
+            this.player.getPosition().setY(this.canvasHeight - this.FIGURE_SIZE);
             this.gravitySpeed = 0;
-            this.canJump = true;
         }
         else {
-            this.canJump = false;
             this.gravity = .3;
         }
         this.gravitySpeed += this.gravity;
-        this.elementPos.setY(this.elementPos.getY() + this.gravitySpeed);
+        this.player.getPosition().setY(this.player.getPosition().getY() + this.gravitySpeed);
+        this.ob.getPosition().setX(this.ob.getPosition().getX() - 10);
+    };
+    /**
+     * Function to check if the player touches any obstacle
+     */
+    Game.prototype.checkCollision = function () {
+        if (this.ob.getPosition().getX() - this.player.getPosition().getX() <= this.FIGURE_SIZE &&
+            this.player.getPosition().getY() - this.ob.getPosition().getY() < 151) {
+            clearInterval(this.interval);
+        }
     };
     /**
      * Function that makes the figure to jump
@@ -70,14 +113,14 @@ var Game = /** @class */ (function () {
      * Function to clear the canvas
      */
     Game.prototype.clearCanvas = function () {
-        this.context.clearRect(0, 0, this.width, this.height);
+        this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
     };
     /**
      * Function that draws the elements
      */
     Game.prototype.draw = function () {
-        this.context.fillStyle = "red";
-        this.context.fillRect(this.elementPos.getX(), this.elementPos.getY(), this.FIGURE_SIZE, this.FIGURE_SIZE);
+        this.context.fillStyle = this.player.getColor();
+        this.context.fillRect(this.player.getPosition().getX(), this.player.getPosition().getY(), this.FIGURE_SIZE, this.FIGURE_SIZE);
     };
     return Game;
 }());
