@@ -85,7 +85,7 @@ class Game {
         this.canvasWidth = mCanvas.width;
 
         this.player = new GameElement(this.FIGURE_SIZE, this.FIGURE_SIZE, new Position(100, 400), "yellow");
-        this.obstacleArray.push(new GameElement(50, 200, new Position(500, 300), "blue"));
+        this.obstacleArray.push(this.createObstalce());
     }
 
     start() {
@@ -100,7 +100,7 @@ class Game {
     update() {
         this.clearCanvas();
         this.moveElement();
-        //this.checkCollision();
+        this.checkCollision();
         this.drawPlayer();
         this.drawObstacle();
         this.passedObstacle();
@@ -176,20 +176,21 @@ class Game {
     }
 
     /**
-     * Function to check if the player touches any obstacle
+     * Function to check if the player touches the obstacle
      */
     checkCollision() {
         if (this.obstacleArray[0].getPosition().getX() - this.player.getPosition().getX() <= this.FIGURE_SIZE
             &&
-            this.player.getPosition().getY() - this.obstacleArray[0].getPosition().getY() < 151) {
+            this.obstacleArray[0].getPosition().getY() - this.player.getPosition().getY() <= 10) {
             clearInterval(this.interval);
         }
+
     }
 
     /**
-     * Function that makes the figure to jump
+     * Function that makes the player to jump
      */
-    jump() {
+    jumpPlayer() {
         this.gravity = -7;
     }
 
@@ -219,7 +220,7 @@ function keyPressed(event: KeyboardEvent) {
 
     switch (KEY_CODE) {
         case SPACE_BAR:
-            game.jump();
+            game.jumpPlayer();
             break;
     }
 }

@@ -54,7 +54,7 @@ var Game = /** @class */ (function () {
         this.canvasHeight = mCanvas.height;
         this.canvasWidth = mCanvas.width;
         this.player = new GameElement(this.FIGURE_SIZE, this.FIGURE_SIZE, new Position(100, 400), "yellow");
-        this.obstacleArray.push(new GameElement(50, 200, new Position(500, 300), "blue"));
+        this.obstacleArray.push(this.createObstalce());
     }
     Game.prototype.start = function () {
         var _this = this;
@@ -68,7 +68,7 @@ var Game = /** @class */ (function () {
     Game.prototype.update = function () {
         this.clearCanvas();
         this.moveElement();
-        //this.checkCollision();
+        this.checkCollision();
         this.drawPlayer();
         this.drawObstacle();
         this.passedObstacle();
@@ -126,19 +126,19 @@ var Game = /** @class */ (function () {
         this.obstacleArray[0].getPosition().setX(this.obstacleArray[0].getPosition().getX() - 10);
     };
     /**
-     * Function to check if the player touches any obstacle
+     * Function to check if the player touches the obstacle
      */
     Game.prototype.checkCollision = function () {
         if (this.obstacleArray[0].getPosition().getX() - this.player.getPosition().getX() <= this.FIGURE_SIZE
             &&
-                this.player.getPosition().getY() - this.obstacleArray[0].getPosition().getY() < 151) {
+                this.obstacleArray[0].getPosition().getY() - this.player.getPosition().getY() <= 10) {
             clearInterval(this.interval);
         }
     };
     /**
-     * Function that makes the figure to jump
+     * Function that makes the player to jump
      */
-    Game.prototype.jump = function () {
+    Game.prototype.jumpPlayer = function () {
         this.gravity = -7;
     };
     /**
@@ -161,7 +161,7 @@ function keyPressed(event) {
     var SPACE_BAR = 32;
     switch (KEY_CODE) {
         case SPACE_BAR:
-            game.jump();
+            game.jumpPlayer();
             break;
     }
 }
