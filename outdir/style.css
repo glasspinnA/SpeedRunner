@@ -1,3 +1,7 @@
+html, body {
+  background: #34495e;
+}
+
 .container {
   background: #09090b;
   width: 1200px;

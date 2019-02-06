@@ -21,6 +21,10 @@ $secondaryBlackColor: lighten($primaryBlackColor,15%);
 $screenBgColor: #3498db;
 
 
+html,body{
+    background: #34495e;
+}
+
 .container{
     background: $primaryBlackColor;
     width:1200px;
