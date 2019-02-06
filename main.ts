@@ -91,15 +91,15 @@ class Game {
      * Function thats starts the game loop 
      */
     start() {
-        this.interval = setInterval(() => {
-            this.update();
-        }, 60);
+        this.update();
     }
 
     /**
      * Function that updates the game window
      */
     update() {
+        this.interval = requestAnimationFrame(() => this.update());
+
         this.clearCanvas();
         this.moveElement();
         this.checkCollision();
@@ -194,7 +194,7 @@ class Game {
         if (playerX1 < obstacleX2 && playerX2 > obstacleX1
             &&
             playerY1 < obstacleY2 && playerY2 > obstacleY1) {
-            clearInterval(this.interval);
+            cancelAnimationFrame(this.interval);
         }
     }
 

@@ -1,3 +1,93 @@
+@mixin centerElement {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin borderRadius($value){
+    border-radius: $value; 
+    -moz-border-radius: $value; 
+    -webkit-border-radius: $value;
+}
+
+@mixin rounded {
+    content: "";
+    position: absolute;
+    border-radius: 100%;
+}
+
+
+@mixin border($color) {
+    border-top:25px solid $color;
+    border-right: 50px solid $color;
+    border-left:50px solid $color;
+    border-bottom:25px solid $color;
+}
+
+$border-color: #FFF; //#000;
+
+.container{
+    background: red;
+    width:80%;
+    height:100%;
+    margin: 0 auto;
+    overflow: hidden;
+    @include centerElement();
+    position: relative;
+}
+
+.reflection{
+    width: 90%;
+    height: 90%;
+    position: absolute;
+    top:10px;
+    left:11px;
+    background: black;
+    @include border(black);
+        @include borderRadius(20px);
+        z-index: 100;
+        opacity: 0.3;
+
+}
+
+
+
+.screen{
+    background: green;
+    width:90%;
+    height:90%;
+    @include border($border-color);
+    @include centerElement();
+    @include borderRadius(20px);
+    position: relative;
+
+    //Camera
+    &:before {
+        width:12px;
+        height:12px;
+        border: 2px solid black;
+        background: blue;
+        left:-35px;
+        @include rounded();
+    }
+
+    //Button
+    &:after{
+        width: 30px;
+        height: 30px;
+        background: white;
+        @include rounded();
+        right:-42px;
+        border:3px solid black;
+        box-shadow: 10px 0px 30px -20px black inset;
+        -moz-box-shadow: 10px 0px 30px -20px black inset;
+        -webkit-box-shadow: 10px 0px 30px -20px black inset;
+
+    }
+
+}
+
+
 
 
 canvas{

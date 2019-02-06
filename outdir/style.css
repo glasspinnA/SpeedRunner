@@ -1,3 +1,73 @@
+.container {
+  background: red;
+  width: 80%;
+  height: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.reflection {
+  width: 90%;
+  height: 90%;
+  position: absolute;
+  top: 10px;
+  left: 11px;
+  background: black;
+  border-top: 25px solid black;
+  border-right: 50px solid black;
+  border-left: 50px solid black;
+  border-bottom: 25px solid black;
+  border-radius: 20px;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+  z-index: 100;
+  opacity: 0.3;
+}
+
+.screen {
+  background: green;
+  width: 90%;
+  height: 90%;
+  border-top: 25px solid #FFF;
+  border-right: 50px solid #FFF;
+  border-left: 50px solid #FFF;
+  border-bottom: 25px solid #FFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+  position: relative;
+}
+.screen:before {
+  width: 12px;
+  height: 12px;
+  border: 2px solid black;
+  background: blue;
+  left: -35px;
+  content: "";
+  position: absolute;
+  border-radius: 100%;
+}
+.screen:after {
+  width: 30px;
+  height: 30px;
+  background: white;
+  content: "";
+  position: absolute;
+  border-radius: 100%;
+  right: -42px;
+  border: 3px solid black;
+  box-shadow: 10px 0px 30px -20px black inset;
+  -moz-box-shadow: 10px 0px 30px -20px black inset;
+  -webkit-box-shadow: 10px 0px 30px -20px black inset;
+}
+
 canvas {
   background: black;
 }

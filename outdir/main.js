@@ -60,15 +60,14 @@ var Game = /** @class */ (function () {
      * Function thats starts the game loop
      */
     Game.prototype.start = function () {
-        var _this = this;
-        this.interval = setInterval(function () {
-            _this.update();
-        }, 60);
+        this.update();
     };
     /**
      * Function that updates the game window
      */
     Game.prototype.update = function () {
+        var _this = this;
+        this.interval = requestAnimationFrame(function () { return _this.update(); });
         this.clearCanvas();
         this.moveElement();
         this.checkCollision();
@@ -143,7 +142,7 @@ var Game = /** @class */ (function () {
         if (playerX1 < obstacleX2 && playerX2 > obstacleX1
             &&
                 playerY1 < obstacleY2 && playerY2 > obstacleY1) {
-            clearInterval(this.interval);
+            cancelAnimationFrame(this.interval);
         }
     };
     /**
