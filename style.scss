@@ -62,11 +62,12 @@ html,body{
 
 
 .ipad-body{
-    width: 92%;
-    height:90%;
+    width: 90%;
+    height:93%;
     background:$screenBgColor;
     @include centerElement();
 }
+
 
 //CODE FOR CREATING REFLECTION ON THE SCREEN OF THE IPAD AND ADDING SOME ANIMATIONS TO THE DESIGN
 /*
@@ -138,6 +139,7 @@ html,body{
     }
 }
 */
+
 
 canvas{
     background:black;

@@ -104,7 +104,7 @@ var Game = /** @class */ (function () {
         var obstacleY2 = this.obstacleArray[0].getPosition().getY() + this.obstacleArray[0].getHeigth();
         if (playerX1 < obstacleX2 && playerX2 > obstacleX1
             &&
-                playerY1 < obstacleY2 && playerY2 > obstacleY1) {
+            playerY1 < obstacleY2 && playerY2 > obstacleY1) {
             cancelAnimationFrame(this.interval);
         }
     };
@@ -142,6 +142,7 @@ function keyPressed(event) {
             break;
     }
 }
+
 /**
  * Function that inits the game window
  */
