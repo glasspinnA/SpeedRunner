@@ -242,7 +242,7 @@ window.onload = function () {
 
     const CANVAS = initGameWindow();
     game = new Game(CANVAS);
-    game.start();
+    //game.start();
 }
 
 /**

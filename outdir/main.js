@@ -179,7 +179,7 @@ window.onload = function () {
     document.addEventListener("keydown", keyPressed);
     var CANVAS = initGameWindow();
     game = new Game(CANVAS);
-    game.start();
+    //game.start();
 };
 /**
  * Function that inits the game window

@@ -62,12 +62,12 @@ html,body{
 
 
 .ipad-body{
-    width: 92%;
-    height:90%;
+    width: 90%;
+    height:93%;
     background:$screenBgColor;
     @include centerElement();
 }
-/*
+
 .start-up{
     width:1200px;
     height: 700px;
@@ -135,7 +135,35 @@ html,body{
         opacity: 0;
     }
 }
-*/
+
+.test {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    position: relative;
+    -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
+    animation-name: example;
+    animation-duration: 4s;
+  }
+  
+  /* Safari 4.0 - 8.0 */
+  @-webkit-keyframes example {
+    0%   {background-color:red; left:0px; top:0px;}
+    25%  {background-color:yellow; left:200px; top:0px;}
+    50%  {background-color:blue; left:200px; top:200px;}
+    75%  {background-color:green; left:0px; top:200px;}
+    100% {background-color:red; left:0px; top:0px;}
+  }
+  
+  /* Standard syntax */
+  @keyframes example {
+    0%   {background-color:red; left:0px; top:0px;}
+    25%  {background-color:yellow; left:200px; top:0px;}
+    50%  {background-color:blue; left:200px; top:200px;}
+    75%  {background-color:green; left:0px; top:200px;}
+    100% {background-color:red; left:0px; top:0px;}
+  }
 canvas{
     background:black;
 }
