@@ -70,8 +70,7 @@ class Game {
     private interval: any;
     private FIGURE_SIZE: number = 50;
 
-
-    private gravity = 0.3;
+    private gravity = 1;
     private gravitySpeed = 0;
 
     private frameRate: number = 0;
@@ -88,6 +87,9 @@ class Game {
         this.obstacleArray.push(this.createObstalce());
     }
 
+    /**
+     * Function thats starts the game loop 
+     */
     start() {
         this.interval = setInterval(() => {
             this.update();
@@ -165,7 +167,7 @@ class Game {
             this.player.getPosition().setY(this.canvasHeight - this.FIGURE_SIZE);
             this.gravitySpeed = 0;
         } else {
-            this.gravity = .3;
+            this.gravity = 1;
         }
 
         this.gravitySpeed += this.gravity;
@@ -179,19 +181,28 @@ class Game {
      * Function to check if the player touches the obstacle
      */
     checkCollision() {
-        if (this.obstacleArray[0].getPosition().getX() - this.player.getPosition().getX() <= this.FIGURE_SIZE
+        const playerX1 = this.player.getPosition().getX();
+        const playerX2 = this.player.getPosition().getX() + this.player.getWidth();
+        const playerY1 = this.player.getPosition().getY();
+        const playerY2 = this.player.getPosition().getY() + this.player.getHeigth();
+
+        const obstacleX1 = this.obstacleArray[0].getPosition().getX();
+        const obstacleX2 = this.obstacleArray[0].getPosition().getX() + this.obstacleArray[0].getWidth();
+        const obstacleY1 = this.obstacleArray[0].getPosition().getY();
+        const obstacleY2 = this.obstacleArray[0].getPosition().getY() + this.obstacleArray[0].getHeigth();
+
+        if (playerX1 < obstacleX2 && playerX2 > obstacleX1
             &&
-            this.obstacleArray[0].getPosition().getY() - this.player.getPosition().getY() <= 10) {
+            playerY1 < obstacleY2 && playerY2 > obstacleY1) {
             clearInterval(this.interval);
         }
-
     }
 
     /**
      * Function that makes the player to jump
      */
     jumpPlayer() {
-        this.gravity = -7;
+        this.gravity = -15;
     }
 
     /**

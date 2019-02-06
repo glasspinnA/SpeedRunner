@@ -46,7 +46,7 @@ var Position = /** @class */ (function () {
 var Game = /** @class */ (function () {
     function Game(mCanvas) {
         this.FIGURE_SIZE = 50;
-        this.gravity = 0.3;
+        this.gravity = 1;
         this.gravitySpeed = 0;
         this.frameRate = 0;
         this.obstacleArray = Array();
@@ -56,6 +56,9 @@ var Game = /** @class */ (function () {
         this.player = new GameElement(this.FIGURE_SIZE, this.FIGURE_SIZE, new Position(100, 400), "yellow");
         this.obstacleArray.push(this.createObstalce());
     }
+    /**
+     * Function thats starts the game loop
+     */
     Game.prototype.start = function () {
         var _this = this;
         this.interval = setInterval(function () {
@@ -119,7 +122,7 @@ var Game = /** @class */ (function () {
             this.gravitySpeed = 0;
         }
         else {
-            this.gravity = .3;
+            this.gravity = 1;
         }
         this.gravitySpeed += this.gravity;
         this.player.getPosition().setY(this.player.getPosition().getY() + this.gravitySpeed);
@@ -129,9 +132,17 @@ var Game = /** @class */ (function () {
      * Function to check if the player touches the obstacle
      */
     Game.prototype.checkCollision = function () {
-        if (this.obstacleArray[0].getPosition().getX() - this.player.getPosition().getX() <= this.FIGURE_SIZE
+        var playerX1 = this.player.getPosition().getX();
+        var playerX2 = this.player.getPosition().getX() + this.player.getWidth();
+        var playerY1 = this.player.getPosition().getY();
+        var playerY2 = this.player.getPosition().getY() + this.player.getHeigth();
+        var obstacleX1 = this.obstacleArray[0].getPosition().getX();
+        var obstacleX2 = this.obstacleArray[0].getPosition().getX() + this.obstacleArray[0].getWidth();
+        var obstacleY1 = this.obstacleArray[0].getPosition().getY();
+        var obstacleY2 = this.obstacleArray[0].getPosition().getY() + this.obstacleArray[0].getHeigth();
+        if (playerX1 < obstacleX2 && playerX2 > obstacleX1
             &&
-                this.obstacleArray[0].getPosition().getY() - this.player.getPosition().getY() <= 10) {
+                playerY1 < obstacleY2 && playerY2 > obstacleY1) {
             clearInterval(this.interval);
         }
     };
@@ -139,7 +150,7 @@ var Game = /** @class */ (function () {
      * Function that makes the player to jump
      */
     Game.prototype.jumpPlayer = function () {
-        this.gravity = -7;
+        this.gravity = -15;
     };
     /**
      * Function to clear the canvas
