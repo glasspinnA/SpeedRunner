@@ -1,3 +1,63 @@
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Class for game elements in the game
+ */
+var GameElement = /** @class */ (function () {
+    function GameElement(width, height, position, color) {
+        this.width = width;
+        this.height = height;
+        this.position = position;
+        this.color = color;
+    }
+    GameElement.prototype.getPosition = function () {
+        return this.position;
+    };
+    GameElement.prototype.getWidth = function () {
+        return this.width;
+    };
+    GameElement.prototype.getHeigth = function () {
+        return this.height;
+    };
+    GameElement.prototype.setPosition = function () {
+        return this.position;
+    };
+    GameElement.prototype.getColor = function () {
+        return this.color;
+    };
+    return GameElement;
+}());
+exports.GameElement = GameElement;
+
+},{}],2:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Class for be able to set and get game elements position
+ */
+var Position = /** @class */ (function () {
+    function Position(x, y) {
+        this.posX = x;
+        this.posY = y;
+    }
+    Position.prototype.getX = function () {
+        return this.posX;
+    };
+    Position.prototype.getY = function () {
+        return this.posY;
+    };
+    Position.prototype.setX = function (x) {
+        this.posX = x;
+    };
+    Position.prototype.setY = function (y) {
+        this.posY = y;
+    };
+    return Position;
+}());
+exports.Position = Position;
+
+},{}],3:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var game;
@@ -155,3 +215,5 @@ window.onload = function () {
     game = new Game(CANVAS);
     game.start();
 };
+
+},{"./GameElement":1,"./Position":2}]},{},[3]);

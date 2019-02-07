@@ -1,68 +1,11 @@
 var game: any;
 
-class GameElement {
+import { GameElement } from './GameElement';
+import { Position } from './Position';
 
-    private position: Position;
-    private height: number;
-    private width: number;
-    private color: string;
-
-    constructor(width: number, height: number, position: Position, color: string) {
-        this.width = width;
-        this.height = height;
-        this.position = position;
-        this.color = color;
-    }
-
-    getPosition() {
-        return this.position;
-    }
-
-    getWidth() {
-        return this.width;
-    }
-
-    getHeigth() {
-        return this.height;
-    }
-
-    setPosition() {
-        return this.position;
-    }
-
-    getColor() {
-        return this.color;
-    }
-
-}
-
-class Position {
-    private posX: number;
-    private posY: number;
-
-    constructor(x: number, y: number) {
-        this.posX = x;
-        this.posY = y;
-    }
-
-    public getX() {
-        return this.posX;
-    }
-
-    public getY() {
-        return this.posY;
-    }
-
-    public setX(x: number) {
-        this.posX = x;
-    }
-
-    public setY(y: number) {
-        this.posY = y;
-    }
-}
-
-
+/**
+ * Class that controlls the game
+ */
 class Game {
     private context: CanvasRenderingContext2D;
     private canvasHeight: number;
@@ -225,6 +168,10 @@ class Game {
     }
 }
 
+/**
+ * Function that listens after keypresses 
+ * @param event 
+ */
 function keyPressed(event: KeyboardEvent) {
     const KEY_CODE = event.keyCode;
     const SPACE_BAR = 32;
@@ -237,18 +184,18 @@ function keyPressed(event: KeyboardEvent) {
 }
 
 
-window.onload = function () {
-    document.addEventListener("keydown", keyPressed);
-
-    const CANVAS = initGameWindow();
-    game = new Game(CANVAS);
-    game.start();
-}
-
 /**
  * Function that inits the game window
  */
 function initGameWindow() {
     const CANVAS = <HTMLCanvasElement>document.getElementById('canvas');
     return CANVAS;
+}
+
+window.onload = function () {
+    document.addEventListener("keydown", keyPressed);
+
+    const CANVAS = initGameWindow();
+    game = new Game(CANVAS);
+    game.start();
 }

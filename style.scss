@@ -10,7 +10,7 @@
     -webkit-border-radius: $value;
 }
 
-@mixin rounded {
+@mixin roundedElements {
     content: "";
     position: absolute;
     border-radius: 100%;
@@ -40,7 +40,7 @@ html,body{
     &:before {
         width:12px;
         height:12px;
-        @include rounded();
+        @include roundedElements();
         left:12px;
         border: 1.5px solid $secondaryBlackColor;
         background: $primaryBlackColor;
@@ -50,7 +50,7 @@ html,body{
     &:after{
         width: 30px;
         height: 30px;
-        @include rounded();
+        @include roundedElements();
         right:4px;
         border:3px solid $secondaryBlackColor;
         box-shadow: 15px 0px 30px -20px white inset;
@@ -67,6 +67,8 @@ html,body{
     background:$screenBgColor;
     @include centerElement();
 }
+
+//CODE FOR CREATING REFLECTION ON THE SCREEN OF THE IPAD AND ADDING SOME ANIMATIONS TO THE DESIGN
 /*
 .start-up{
     width:1200px;
@@ -136,6 +138,7 @@ html,body{
     }
 }
 */
+
 canvas{
     background:black;
 }
